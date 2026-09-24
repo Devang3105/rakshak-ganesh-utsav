@@ -87,6 +87,26 @@
       animation: flameFlicker 1.8s infinite ease-in-out;
       transform-origin: bottom center;
     }
+    /* Anti-copying & Image protection styles */
+    body {
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+    img {
+      -webkit-user-drag: none;
+      -khtml-user-drag: none;
+      -moz-user-drag: none;
+      -o-user-drag: none;
+      user-drag: none;
+    }
+    input, textarea, select, option {
+      -webkit-user-select: text !important;
+      -moz-user-select: text !important;
+      -ms-user-select: text !important;
+      user-select: text !important;
+    }
     /* Hidden utility for QR generation */
     #qrcode-hidden { display: none; }
   </style>
@@ -1670,6 +1690,31 @@
         renderDocumentOnCanvas();
       };
     }
+
+    // Anti-Copy & Anti-Inspect Security Protection
+    document.addEventListener('contextmenu', function(e) {
+      e.preventDefault();
+      return false;
+    });
+
+    document.addEventListener('dragstart', function(e) {
+      if (e.target.tagName === 'IMG') {
+        e.preventDefault();
+        return false;
+      }
+    });
+
+    document.addEventListener('keydown', function(e) {
+      // Disable F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U, Ctrl+S
+      if (
+        e.keyCode === 123 || 
+        (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74)) || 
+        (e.ctrlKey && (e.keyCode === 85 || e.keyCode === 83))
+      ) {
+        e.preventDefault();
+        return false;
+      }
+    });
 
     // Initialize on window load
     window.onload = function() {
